@@ -2,6 +2,18 @@
 
 I keep hearing from people about how I should not read an agent's code, and instead just focus on testing the interface. This hasn't worked for me personally. In this repo, I'm keeping track of concrete examples where agents have failed.
 
+## 10/27/26
+
+In a session with Codex, I asked it to add support for tagging runs in agency. It discussed whether the tags should be simple strings or if they should be key-value pairs. It wrote up a plan. The plan involved setting key-value pair tags in the run's metadata. I asked if it is safe to put this in the run's metadata: If the users specify key-value pairs, is it possible that they would overwrite run metadata that we would want to keep?
+
+Codex responded that this is safe to do, and that there is already precedence: Run metadata already has a `tags` field where we can store string labels, and a `custom` field, where we can store user-defined key-value pairs.
+I then said, it looks like we have support for tagging already. We in fact have _two_ ways of tagging runs in Agency already: the plain string way and the key-value pairs way. So, what have we been designing this whole time?
+Codex: "Yes. Both fields already exist, and I should have made that clear before proposing another one. Adding tagValues would create a third overlapping storage field. I now think that is unnecessary."
+
+It is crazy to me that Codex saw that we already have two ways of tagging runs, but just took my request at face value and happily proceeded to write a plan for a third way to tag runs. Even after it showed me that there are already two ways of tagging runs, that didn't make it pause, reconsider, and say, maybe we shouldn't add a third way. This is an issue I have run into with coding agents several times before: they just do a really poor job of thinking through the assumptions being made in each conversation and challenging those assumptions.
+
+GPT-6 Astra Ultra / Codex
+
 ## 10/26/26
 
 In agency, we have a std::spill module (https://agency-lang.com/stdlib/spill.html). The idea is that if a tool call returns a result that is too long, we can use these tools to write the tool call result to a file and then give the agent some tools to read parts of the file selectively. This is a very common pattern. I recently found that the way Claude implemented this was that, for each tool call, it would check if the spill tools were part of the tools being given to the LLM, and change its behavior based on that. I think this is an anti-pattern. We should not be changing behavior based on what tools are being offered to an LLM. This was surprising behavior to me.
