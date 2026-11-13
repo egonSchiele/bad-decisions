@@ -2,6 +2,12 @@
 
 I keep hearing from people about how I should not read an agent's code, and instead just focus on testing the interface. This hasn't worked for me personally. In this repo, I'm keeping track of concrete examples where agents have failed.
 
+## 11/13/26
+
+Part of a general pattern: Whenever Claude needs to fix an issue with one of the tools in the agency agent, sometimes it decides to make the change in the agency runtime itself, instead of fixing it in the tool, leading to a lot of special case logic that match only that specific tool. So in the future, if we have tools that do the same thing, but have a different name or shape, they wouldn't get the fix, and in the meantime, tools that DO have the same name or shape, but do different things, might still get the "fix" applied to them accidentally. eg this pr, first commit: https://github.com/egonSchiele/agency-lang/pull/1458/
+
+Fable 5.2 / Claude Code
+
 ## 11/9/26
 
 I had a Fable interaction today that nicely shows the kinds of issues I still have with models. It delves a little into the internals of the agency-lang package, but then I think all interesting interactions do. The issue with explaining when models are bad at coding is, they're not bad at the one-shot examples everyone loves to pull out where an agent does a brilliant job designing and building a website from scratch. It's the cases where they are trying to make edits to an existing project that is very complex. That is where coding agents fail.
@@ -83,6 +89,8 @@ It said:
 ```
 
 Correct. If I had not read these plans, however, Fable would have pushed a change that would have been worse in every way. It would have led to more complex code, more maintainability problems, and a new "feature" that silently breaks core features of Agency. _This_ is why I think agents cannot write code autonomously. I feel the response I always hear is, "Well, if it works correctly, who cares?" Which is fine when it's just building you a website. However, this is a programming language. It has tons of features, and when Fable proposes a new design like this, it does not go through every single feature to see how it would interact with this new design. And even if it did, the whole point of a programming language is that you can compose multiple features together, and it sure doesn't go through every combination of features to see how it would interact with this new design.
+
+Fable 5.1 / Claude Code
 
 ## 10/27/26
 
